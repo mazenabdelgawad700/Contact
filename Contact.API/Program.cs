@@ -1,4 +1,3 @@
-
 using Contact.Core;
 using Contact.Infrastructure;
 using Contact.Infrastructure.Context;
@@ -52,7 +51,6 @@ namespace Contact.API
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -73,9 +71,9 @@ namespace Contact.API
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                string[] roleNames = ["Admin", "User"];
                 if (!roleManager.Roles.Any())
                 {
+                    string[] roleNames = ["Admin", "User"];
                     foreach (var roleName in roleNames)
                     {
                         if (!await roleManager.RoleExistsAsync(roleName))

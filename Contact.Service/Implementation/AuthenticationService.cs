@@ -8,9 +8,11 @@ namespace Contact.Service.Implementation
     internal class AuthenticationService : ReturnBase, IAuthenticationService
     {
         private readonly UserManager<User> _userManager;
-        public AuthenticationService(UserManager<User> userManager)
+        private readonly IConfirmEmailService _confirmEmailService;
+        public AuthenticationService(UserManager<User> userManager, IConfirmEmailService confirmEmailService)
         {
             this._userManager = userManager;
+            this._confirmEmailService = confirmEmailService;
         }
 
         public async Task<ReturnBase<bool>> RegisterUserAsync(User user, string password)
@@ -31,7 +33,12 @@ namespace Contact.Service.Implementation
                     else
                         await _userManager.AddToRoleAsync(user, "User");
 
-                    return Success<bool>(true);
+                    var sendConfirmationEmailResult = await _confirmEmailService.SendConfirmationEmailAsync(user);
+
+                    while (!sendConfirmationEmailResult.Succeeded)
+                        sendConfirmationEmailResult = await _confirmEmailService.SendConfirmationEmailAsync(user);
+
+                    return Success<bool>(true, "User registerd successfully, please confirm your email address");
                 }
 
                 return Failed<bool>("Failed to register user, please try again");

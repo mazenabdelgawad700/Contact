@@ -9,6 +9,8 @@ namespace Contact.Service
         public static IServiceCollection AddServiceDependencies(this IServiceCollection services)
         {
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<ISendEmailService, SendEmailService>();
+            services.AddTransient<IConfirmEmailService, ConfirmEmailService>();
             return services;
         }
     }

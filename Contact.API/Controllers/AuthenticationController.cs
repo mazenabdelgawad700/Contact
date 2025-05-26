@@ -1,5 +1,6 @@
 ﻿using Contact.API.Base;
 using Contact.Core.Featuers.Authentication.Command.Model;
+using Contact.Shared.Bases;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Contact.API.Controllers
@@ -12,6 +13,12 @@ namespace Contact.API.Controllers
         {
             var result = await Mediator.Send(command);
             return ReturnResult(result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailCommand command)
+        {
+            ReturnBase<bool> response = await Mediator.Send(command);
+            return ReturnResult(response);
         }
     }
 }
