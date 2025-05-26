@@ -20,5 +20,11 @@ namespace Contact.API.Controllers
             ReturnBase<bool> response = await Mediator.Send(command);
             return ReturnResult(response);
         }
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return ReturnResult(result);
+        }
     }
 }

@@ -8,7 +8,8 @@ using MediatR;
 namespace Contact.Core.Featuers.Authentication.Command.Handler
 {
     public class AuthenticationCommandHandler : ReturnBase, IRequestHandler<RegisterUserCommand, ReturnBase<bool>>,
-        IRequestHandler<ConfirmEmailCommand, ReturnBase<bool>>
+        IRequestHandler<ConfirmEmailCommand, ReturnBase<bool>>,
+        IRequestHandler<LoginCommand, ReturnBase<string>>
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfirmEmailService _confirmEmailService;
@@ -55,6 +56,22 @@ namespace Contact.Core.Featuers.Authentication.Command.Handler
             catch (Exception ex)
             {
                 return Failed<bool>(ex.InnerException.Message);
+            }
+        }
+        public async Task<ReturnBase<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var loginResult = await _authenticationService.LoginAsync(request.Email, request.Password, request.RememberMe);
+
+                if (!loginResult.Succeeded)
+                    return Failed<string>(loginResult.Message);
+
+                return Success(loginResult.Data, loginResult.Message);
+            }
+            catch (Exception ex)
+            {
+                return Failed<string>(ex.InnerException.Message);
             }
         }
     }
