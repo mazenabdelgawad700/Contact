@@ -26,5 +26,11 @@ namespace Contact.API.Controllers
             var result = await Mediator.Send(command);
             return ReturnResult(result);
         }
+        [HttpPost]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return ReturnResult(result);
+        }
     }
 }

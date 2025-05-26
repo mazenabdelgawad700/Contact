@@ -65,6 +65,7 @@ namespace Contact.Infrastructure
                    ValidAudience = jwtSettings.Audience,
                    ValidateAudience = jwtSettings.ValidateAudience,
                    ValidateLifetime = jwtSettings.ValidateLifeTime,
+                   ClockSkew = TimeSpan.Zero
                };
            });
 
@@ -73,7 +74,7 @@ namespace Contact.Infrastructure
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecommerce", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contact", Version = "v1" });
                 c.EnableAnnotations();
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme

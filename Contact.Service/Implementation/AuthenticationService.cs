@@ -20,6 +20,8 @@ namespace Contact.Service.Implementation
         private readonly IConfirmEmailService _confirmEmailService;
         private readonly JwtSettings _jwtSettings;
         private readonly AppDbContext _dbContext;
+
+
         public AuthenticationService(UserManager<User> userManager, IConfirmEmailService confirmEmailService, SignInManager<User> signInManager, JwtSettings jwtSettings, AppDbContext dbContext)
         {
             this._userManager = userManager;

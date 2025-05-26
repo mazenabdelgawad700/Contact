@@ -9,7 +9,8 @@ namespace Contact.Core.Featuers.Authentication.Command.Handler
 {
     public class AuthenticationCommandHandler : ReturnBase, IRequestHandler<RegisterUserCommand, ReturnBase<bool>>,
         IRequestHandler<ConfirmEmailCommand, ReturnBase<bool>>,
-        IRequestHandler<LoginCommand, ReturnBase<string>>
+        IRequestHandler<LoginCommand, ReturnBase<string>>,
+        IRequestHandler<RefreshTokenCommand, ReturnBase<string>>
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfirmEmailService _confirmEmailService;
@@ -68,6 +69,22 @@ namespace Contact.Core.Featuers.Authentication.Command.Handler
                     return Failed<string>(loginResult.Message);
 
                 return Success(loginResult.Data, loginResult.Message);
+            }
+            catch (Exception ex)
+            {
+                return Failed<string>(ex.InnerException.Message);
+            }
+        }
+        public async Task<ReturnBase<string>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var refreshTokenResult = await _authenticationService.RefreshTokenAsync(request.AccessToken);
+
+                if (!refreshTokenResult.Succeeded)
+                    return Failed<string>(refreshTokenResult.Message);
+
+                return Success(refreshTokenResult.Data, refreshTokenResult.Message);
             }
             catch (Exception ex)
             {
